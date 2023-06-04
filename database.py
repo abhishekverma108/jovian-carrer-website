@@ -1,10 +1,20 @@
 import sqlalchemy
+import os
 print(sqlalchemy.__version__)
 from sqlalchemy import create_engine,text
-connectinstring="mysql+mysqlconnector://s97cuzyinv4tyhg8v95v:pscale_pw_dOMuGewERfOEHoAuijKAMKkS2j8oMwBXThN7Q1fgpqz@aws.connect.psdb.cloud/joviancarrer"
+connectinstring=os.environ["CONNECTION_STRING"]
+
 
 engine = create_engine(connectinstring,
  echo=True)
-  
+
+
+def load_jobs_from_db():
+  with engine.connect() as conn:
+    result = conn.execute(text("select * from jobs"))
+    jobs=[]
+    for row in result.all():
+      jobs.append(row._asdict())
+    return jobs
 
     
